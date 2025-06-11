@@ -1,0 +1,61 @@
+; -------------------------------------------------------------
+; Copyright 2024 University of Calgary
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+; http://www.apache.org/licenses/LICENSE-2.0
+;
+; Unless required by applicable law or agreed to in writing, software
+; distributed under the License is distributed on an "AS IS" BASIS,
+; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+; See the License for the specific language governing permissions and
+; limitations under the License.
+; -------------------------------------------------------------
+
+;+
+; :Description:
+;       Retrieve list of available observatories where an instrument exist,
+;       including full name, geodetic latitude and longitude. Optional parameters
+;       are used to filter for certain matching observatories.
+;
+; :Parameters:
+;       instrument_array: in, required, String
+;         the instrument array. Possible values are 'norstar_riometer' and 'swan_hsr'.
+;
+; :Keywords:
+;       uid: in, optional, String
+;         site unique identifier to filter on
+;
+; :Returns:
+;       List(Structure)
+;
+; :Examples:
+;       observatories = ucrio_list_observatories('norstar_riometer')
+;       observatories = ucrio_list_observatories('swan_hsr', uid='mean')
+;+
+function ucrio_list_observatories, instrument_array, uid = uid
+  ; set params
+  param_str = '?instrument_array=' + instrument_array
+  if (isa(uid) eq 1) then begin
+    param_str += '&uid=' + uid
+  endif
+
+  ; set up request
+  req = obj_new('IDLnetUrl')
+  req.setProperty, url_scheme = 'https'
+  req.setProperty, url_port = 443
+  req.setProperty, url_host = 'api.phys.ucalgary.ca'
+  req.setProperty, url_path = 'api/v1/data_distribution/observatories' + param_str
+  req.setProperty, headers = 'User-Agent: idl-ucrio/' + __ucrio_version()
+
+  ; make request
+  output = req.get(/string_array)
+
+  ; serialize into struct
+  status = json_parse(output, /tostruct)
+
+  ; return
+  return, status
+end

@@ -1,0 +1,57 @@
+; -------------------------------------------------------------
+; Copyright 2024 University of Calgary
+;
+; Licensed under the Apache License, Version 2.0 (the "License");
+; you may not use this file except in compliance with the License.
+; You may obtain a copy of the License at
+;
+; http://www.apache.org/licenses/LICENSE-2.0
+;
+; Unless required by applicable law or agreed to in writing, software
+; distributed under the License is distributed on an "AS IS" BASIS,
+; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+; See the License for the specific language governing permissions and
+; limitations under the License.
+; -------------------------------------------------------------
+
+;+
+; :Description:
+;       Determine if a given dataset is supported in the ucrio_read()
+;       function. This function will return 0 for False, 1 for True.
+;
+;       Some datasets provided by UCalgary require special readfile routines. This
+;       function provides the ability to programmatically determine if a dataset
+;       is supported in the ucrio_read() function.
+;
+;       Some datasets are simple enough for special read routines to be needed. For
+;       example, 'THEMIS_ASI_DAILY_KEOGRAM_JPG', can be read in using the built-in
+;       READ_JPEG procedure.
+;
+; :Parameters:
+;       dataset_name: in, required, String
+;         name of the dataset to check for read support
+;
+; :Returns:
+;       Integer
+;
+; :Examples:
+;       supported = ucrio_is_read_supported('SWAN_HSR_K0_H5')
+;       supported = ucrio_is_read_supported('SWAN_HSR_K0_SUMMARY_PLOT_JPG')
+;+
+function ucrio_is_read_supported, dataset_name
+  ; set list
+  supported_datasets = list( $
+    'NORSTAR_RIOMETER_K0_TXT', $
+    'NORSTAR_RIOMETER_K2_TXT', $
+    'SWAN_HSR_K0_H5')
+
+  ; check
+  supported = supported_datasets.where(dataset_name)
+  if (isa(supported) eq 1) then begin
+    ; found match
+    return, 1
+  endif else begin
+    ; did not find match, null was returned from the where call
+    return, 0
+  endelse
+end

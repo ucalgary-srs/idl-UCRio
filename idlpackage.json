@@ -1,0 +1,12 @@
+{
+    "Name": "idl-ucrio",
+    "Version": "1.0.0",
+    "Author": "Josh Houghton, Darren Chaddock",
+    "Date": "2025-06-11",
+    "Dependencies": [
+        {
+            "Name": "IDL",
+            "Version": ">=8.8.3"
+        }
+    ]
+}
