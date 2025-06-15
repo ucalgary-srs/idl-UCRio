@@ -15,23 +15,23 @@
 ; -------------------------------------------------------------
 
 pro ucrio_example_download_data
-  ; download an hour of THEMIS ASI data
+  ; download one day of raw NORSTAR riometer data
   ;
-  ; using the aurorax_list_datasets() function, we figured out that
+  ; using the ucrio_list_datasets() function, we figured out that
   ; the dataset names we want to use
-  d = aurorax_ucalgary_download('THEMIS_ASI_RAW', '2022-01-01T06:00:00', '2022-01-01T06:59:59', site_uid = 'atha')
+  d = ucrio_download('NORSTAR_RIOMETER_K2_TXT', '2017-11-09T00:00:00', '2017-11-09T23:59:59', site_uid = 'pina')
   help, d
   print, ''
-
+  
   ; download with no output
-  d = aurorax_ucalgary_download('THEMIS_ASI_RAW', '2022-01-01T06:00:00', '2022-01-01T06:59:59', site_uid = 'atha', /quiet)
+  d = ucrio_download('NORSTAR_RIOMETER_K0_TXT', '2017-11-09T00:00:00', '2017-11-09T23:59:59', site_uid = 'pina', /quiet)
   print, ''
 
-  ; download one minute of data from all sites
-  d = aurorax_ucalgary_download('TREX_RGB_RAW_NOMINAL', '2022-01-01T06:00:00', '2022-01-01T06:00:00')
+  ; download one day of data from all sites
+  d = ucrio_download('NORSTAR_RIOMETER_K0_TXT', '2017-11-09T00:00:00', '2017-11-09T23:59:59')
   print, ''
 
   ; download force redownload of data, even if it exists locally already
-  d = aurorax_ucalgary_download('TREX_RGB_RAW_NOMINAL', '2022-01-01T06:00:00', '2022-01-01T06:00:00', /overwrite)
+  d = ucrio_download('NORSTAR_RIOMETER_K0_TXT', '2017-11-09T00:00:00', '2017-11-09T23:59:59', site_uid = 'pina', /overwrite)
   print, ''
 end

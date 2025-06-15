@@ -15,8 +15,8 @@
 ; -------------------------------------------------------------
 
 pro ucrio_example_read_data
-  ; download an hour of THEMIS ASI data
-  d = aurorax_ucalgary_download('THEMIS_ASI_RAW', '2022-01-01T06:00:00', '2022-01-01T06:59:59', site_uid = 'gill')
+  ; download one day of NORSTAR Riometer data
+  d = ucrio_download('NORSTAR_RIOMETER_K2_TXT', '2017-11-09T00:00:00', '2017-11-09T23:59:59', site_uid = 'pina')
 
   ; set list of files to read
   ;
@@ -25,13 +25,13 @@ pro ucrio_example_read_data
   f = d.filenames
 
   ; read the data
-  data = aurorax_ucalgary_read(d.dataset, f)
+  data = ucrio_read(d.dataset, f)
   help, data
 
   ; read only some of the data using start_dt and end_dt
-  data = aurorax_ucalgary_read(d.dataset, f, start_dt = '2022-01-01T06:13:00', end_dt = '2022-01-01T06:40:00')
-  help, data
-
+  data = ucrio_read(d.dataset, f, start_dt='2017-11-09T06:00:00', end_dt='2017-11-09T09:59:00')
+  
   ; read the data quietly
-  data = aurorax_ucalgary_read(d.dataset, f[0], /quiet)
+  data = ucrio_read(d.dataset, f, /quiet)
+
 end

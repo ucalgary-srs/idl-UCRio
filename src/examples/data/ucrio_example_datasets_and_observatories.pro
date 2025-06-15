@@ -20,12 +20,12 @@ pro ucrio_example_datasets_and_observatories
   ; ------------------------
   ;
   ; All data available is organized by unique 'dataset' identifier strings, similar to CDAWeb. For
-  ; example, `THEMIS_ASI_RAW` is the dataset name for the raw THEMIS all-sky imager data, one of
+  ; example, `NORSTAR_RIOMETER_K0_TXT` is the dataset name for the raw NORSTAR riometer data, one of
   ; the common datasets for that instrument array.
   ;
   ; There are a few functions to help explore the available datasets and information about them. There
-  ; is `aurorax_list_datasets()` to retrieve any datasets matching optional filters, and
-  ; `aurorax_get_dataset()` which retrieves a specific single dataset.
+  ; is `ucrio_list_datasets()` to retrieve any datasets matching optional filters, and
+  ; `ucrio_get_dataset()` which retrieves a specific single dataset.
   ;
   ; You can also navigate to the Dataset Descriptions page (https://data.phys.ucalgary.ca/about_datasets)
   ; and navigate to a particular instrument page. There, you will find a listing of all available (and
@@ -36,7 +36,7 @@ pro ucrio_example_datasets_and_observatories
   ; provider.
 
   ; list datasets
-  datasets = aurorax_list_datasets()
+  datasets = ucrio_list_datasets()
   print, 'Found ' + strcompress(fix(n_elements(datasets)), /remove_all) + ' datasets'
 
   ; show the first one
@@ -44,13 +44,13 @@ pro ucrio_example_datasets_and_observatories
   print, ''
 
   ; list datasets with filter
-  datasets = aurorax_list_datasets(name = 'trex_rgb')
+  datasets = ucrio_list_datasets(name = 'norstar')
   print, 'Found ' + strcompress(fix(n_elements(datasets)), /remove_all) + ' datasets'
   help, datasets[0]
   print, ''
 
   ; get a specific dataset
-  dataset = aurorax_get_dataset('TREX_RGB_RAW_NOMINAL')
+  dataset = ucrio_get_dataset('SWAN_HSR_K0_H5')
   help, dataset
   print, ''
 
@@ -63,18 +63,18 @@ pro ucrio_example_datasets_and_observatories
   ; site code and full names, along with their geodetic latitude and longitude.
   ;
   ; You can use the `aurorax_list_observatories()` function to retrieve observatory information. To determine
-  ; the valid 'instrument_array' values, please refer to the IDL-AuroraX API reference, or utilize the integrated
+  ; the valid 'instrument_array' values, please refer to the IDL-UCRio API reference, or utilize the integrated
   ; docs for the functions.
 
-  ; list all observatories for THEMIS ASI
-  observatories = aurorax_list_observatories('themis_asi')
-  print, 'Found ' + strcompress(fix(n_elements(observatories)), /remove_all) + ' observatories part of the "themis_asi" instrument array'
+  ; list all observatories for NORSTAR Riometers
+  observatories = ucrio_list_observatories('norstar_riometer')
+  print, 'Found ' + strcompress(fix(n_elements(observatories)), /remove_all) + ' observatories part of the "norstar_riometer" instrument array'
   print, ''
 
   ; You can also filter using the UID parameter. This filter will find partial
   ; matches as well.
-  obs_gill = aurorax_list_observatories('trex_rgb', uid = 'gill')
-  print, 'Retrieved and displaying the TREx RGB GILL observatory'
-  help, obs_gill[0]
+  obs_buff = ucrio_list_observatories('norstar_riometer', uid = 'talo')
+  print, 'Retrieved and displaying the NORSTAR Riometer BUFF observatory'
+  help, obs_buff[0]
   print, ''
 end
