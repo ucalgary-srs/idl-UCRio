@@ -120,14 +120,14 @@ function ucrio_read, dataset, file_list, start_dt = start_dt, end_dt = end_dt, f
     endelse
   endif else if (read_function eq 'hsr') then begin
     if (quiet_flag eq 0) then begin
-      __ucrio_readfile_hsr, file_list, data, meta, start_dt = start_dt, end_dt = end_dt, first_frame = first_record, no_metadata = no_metadata, /verbose, /show_datarate
+      __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, first_frame = first_record, no_metadata = no_metadata, /verbose, /show_datarate
     endif else begin
-      __ucrio_readfile_hsr, file_list, data, meta, start_dt = start_dt, end_dt = end_dt, first_frame = first_record, no_metadata = no_metadata, verbose=-1
+      __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, first_frame = first_record, no_metadata = no_metadata, verbose=-1
     endelse
   endif
   
   if n_elements(data) eq 0 then return, !null
   
   ; put data into a struct
-  return, {data: data, timestamp: timestamp_list, metadata: metadata_list, dataset: dataset}
+  return, {data: data, timestamp: timestamp_list, metadata: meta, dataset: dataset}
 end

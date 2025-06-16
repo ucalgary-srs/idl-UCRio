@@ -46,7 +46,7 @@ pro __ucrio_readfile_norstar, $
   ; create local var for filenames
   filenames = filename
   
-  ; Convert scalar filename to length 1 array so we can 'iterate' regardless
+  ; Convert scalar filename to length 1 array so we can iterate regardless
   if isa(filenames, /scalar) then filenames = [filenames]
 
   ; If start_dt or end_dt were passed, we need to cut down the filenames accordingly
@@ -194,11 +194,11 @@ pro __ucrio_readfile_norstar, $
         
         ; Format this line's timestamp properly
         if fix(strmid(line_date,6,2)) lt 89 then begin
-          line_ts = '20'+strmid(line_date,6,2)+'/'+strmid(line_date,3,2)+'/'+strmid(line_date,0,2)+' '+ $
-                    strmid(line_time,0,2)+':'+strmid(line_time,3,2)+':'+strmid(line_time,6,2)
+          line_ts = '20'+strmid(line_date,6,2)+'-'+strmid(line_date,3,2)+'-'+strmid(line_date,0,2)+' '+ $
+                    strmid(line_time,0,2)+':'+strmid(line_time,3,2)+':'+strmid(line_time,6,2)+' utc'
         endif else begin
-          line_ts = '19'+strmid(line_date,6,2)+'/'+strmid(line_date,3,2)+'/'+strmid(line_date,0,2)+' '+ $
-                    strmid(line_time,0,2)+':'+strmid(line_time,3,2)+':'+strmid(line_time,6,2)
+          line_ts = '19'+strmid(line_date,6,2)+'-'+strmid(line_date,3,2)+'-'+strmid(line_date,0,2)+' '+ $
+                    strmid(line_time,0,2)+':'+strmid(line_time,3,2)+':'+strmid(line_time,6,2)+' utc'
         endelse
         
         ; Don't add records that are outside of the requested timerange for reading
@@ -275,12 +275,9 @@ pro __ucrio_readfile_norstar, $
           endelse
         endif
       endif
-      
-      
     endwhile
-    
     free_lun, lun
-    
+        
     if isa(found_site_uid) then begin
       file_metadata['site_unique_id'] = found_site_uid
     endif else begin
@@ -313,14 +310,14 @@ pro __ucrio_readfile_norstar, $
     master_metadata.add, file_metadata
     if (file_type eq 'k2') then begin
       master_data.add, {raw_signal:file_raw_signal, absorption:file_absorption}
-    endif else if (file_type eq 'k1') then begin
+    endif else if (file_type eq 'k0') then begin
       master_data.add, {raw_signal:raw_signal, absorption:!values.f_nan}
     endif
   endforeach
   
   ; Assign to global vars
   data = master_data
-  meta = master_metadata
+  metadata = master_metadata
   timestamp_list = master_timestamp
   
 end
