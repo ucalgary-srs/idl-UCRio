@@ -113,16 +113,18 @@ function ucrio_read, dataset, file_list, start_dt = start_dt, end_dt = end_dt, f
 
   ; read the data
   if (read_function eq 'norstar') then begin
+    if (keyword_set(first_record) eq 1) then print, '[ucrio_read] Warning: keyword first_record is not accepted for NORSTAR riometer data, and will have no effect'
     if (quiet_flag eq 0) then begin
-      __ucrio_readfile_norstar, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, first_frame = first_record, no_metadata = no_metadata, /verbose, /show_datarate
+      __ucrio_readfile_norstar, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, /verbose
     endif else begin
-      __ucrio_readfile_norstar, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, first_frame = first_record, no_metadata = no_metadata, verbose=-1
+      __ucrio_readfile_norstar, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, verbose=-1
     endelse
   endif else if (read_function eq 'hsr') then begin
+    if (keyword_set(first_record) eq 1) then print, '[ucrio_read] Warning: keyword first_record is not accepted for SWAN HSR data, and will have no effect'
     if (quiet_flag eq 0) then begin
-      __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, first_frame = first_record, no_metadata = no_metadata, /verbose, /show_datarate
+      __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, /verbose
     endif else begin
-      __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, first_frame = first_record, no_metadata = no_metadata, verbose=-1
+      __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, verbose=-1
     endelse
   endif
   

@@ -22,9 +22,7 @@ pro __ucrio_readfile_hsr, $
   start_dt = start_dt, $
   end_dt = end_dt, $
   verbose = verbose, $
-  show_datarate = show_datarate, $
   no_metadata = no_metadata, $
-  first_frame = first_frame
   compile_opt hidden
   
   if not isa(verbose) then verbose = 1

@@ -22,9 +22,7 @@ pro __ucrio_readfile_norstar, $
   start_dt = start_dt, $
   end_dt = end_dt, $
   verbose = verbose, $
-  show_datarate = show_datarate, $
   no_metadata = no_metadata, $
-  first_frame = first_frame
   compile_opt hidden
   
   NORSTAR_RIOMETER_3_LETTER_SITE_CODES = hash("chur", ["chu"], $
