@@ -50,8 +50,6 @@
 function ucrio_read, dataset, file_list, start_dt = start_dt, end_dt = end_dt, first_record = first_record, no_metadata = no_metadata, quiet = quiet
   ; init
   timestamp_list = list()
-  metadata_list = list()
-  calibrated_data = ptr_new()
 
   ; set keyword flags
   quiet_flag = 0
@@ -117,19 +115,19 @@ function ucrio_read, dataset, file_list, start_dt = start_dt, end_dt = end_dt, f
     if (quiet_flag eq 0) then begin
       __ucrio_readfile_norstar, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, /verbose
     endif else begin
-      __ucrio_readfile_norstar, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, verbose=-1
+      __ucrio_readfile_norstar, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, verbose = -1
     endelse
   endif else if (read_function eq 'hsr') then begin
     if (keyword_set(first_record) eq 1) then print, '[ucrio_read] Warning: keyword first_record is not accepted for SWAN HSR data, and will have no effect'
     if (quiet_flag eq 0) then begin
       __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, /verbose
     endif else begin
-      __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, verbose=-1
+      __ucrio_readfile_hsr, file_list, data, meta, timestamp_list, start_dt = start_dt, end_dt = end_dt, no_metadata = no_metadata, verbose = -1
     endelse
   endif
-  
+
   if n_elements(data) eq 0 then return, !null
-  
+
   ; put data into a struct
   return, {data: data, timestamp: timestamp_list, metadata: meta, dataset: dataset}
 end

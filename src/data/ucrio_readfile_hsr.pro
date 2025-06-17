@@ -22,9 +22,9 @@ pro __ucrio_readfile_hsr, $
   start_dt = start_dt, $
   end_dt = end_dt, $
   verbose = verbose, $
-  no_metadata = no_metadata, $
+  no_metadata = no_metadata
   compile_opt hidden
-  
+
   if not isa(verbose) then verbose = 1
 
   ; create local var for filenames
@@ -42,7 +42,7 @@ pro __ucrio_readfile_hsr, $
       start_hr = strmid(start_dt, 11, 2)
       start_mn = strmid(start_dt, 14, 2)
       start_sc = strmid(start_dt, 17, 2)
-      start_long = ulong(start_yy+start_mm+start_dd)
+      start_long = ulong(start_yy + start_mm + start_dd)
       start_juldt = julday(start_mm, start_dd, start_yy, start_hr, start_mn, start_sc)
     endif
     if keyword_set(end_dt) then begin
@@ -52,7 +52,7 @@ pro __ucrio_readfile_hsr, $
       end_hr = strmid(end_dt, 11, 2)
       end_mn = strmid(end_dt, 14, 2)
       end_sc = strmid(end_dt, 17, 2)
-      end_long = ulong(end_yy+end_mm+end_dd)
+      end_long = ulong(end_yy + end_mm + end_dd)
       end_juldt = julday(end_mm, end_dd, end_yy, end_hr, end_mn, end_sc)
     endif
 
@@ -84,54 +84,48 @@ pro __ucrio_readfile_hsr, $
   master_data = list()
   master_metadata = list()
 
-  frames_read_counter = 0ul
-  break_after_first = 0
-  n_files_outside_timerange = 0ul
-  foreach f, filenames, file_num do begin
+  foreach f, filenames do begin
     if (verbose gt 0) then print, '[ucrio_read] Reading file: ' + f
-    
+
     f_basename = (strsplit(f, path_sep(), /extract))[-1]
-    
+
     ; Open h5 file
     file_id = h5f_open(f)
 
     ; Get data group ID and ensure it's not empty
     data_group_id = h5g_open(file_id, 'data')
     if h5g_get_nmembers(file_id, 'data') eq 0 then begin
-      print, "[ucrio_read] Error: empty data group found in file "+f
+      print, '[ucrio_read] Error: empty data group found in file ' + f
       continue
     endif
-    
+
     ; Get dataset identifiers
     timestamp_dataset_id = h5d_open(data_group_id, 'timestamp')
     band_central_freq_id = h5d_open(data_group_id, 'band_central_frequency')
     band_passband_id = h5d_open(data_group_id, 'band_passband')
     raw_power_id = h5d_open(data_group_id, 'raw_power')
-    
-    ; NOTE: These are already in the metadata... need to check
-    ; if there is any reason to read them in from data group
-    ; 
-;    ; Read central frequency and passband (String array)
-;    band_central_freq = h5d_read(band_central_freq_id)
-;    band_passband = h5d_read(band_passband_id)
-    
+
+    ; Read central frequency and passband (String array)
+    band_central_freq = h5d_read(band_central_freq_id)
+    band_passband = h5d_read(band_passband_id)
+
     ; Read timestamps and strip off 'UTC'
-    timestamps = strmid(h5d_read(timestamp_dataset_id),0,19)
-    
-    ; Read in raw power 
+    timestamps = strmid(h5d_read(timestamp_dataset_id), 0, 19)
+
+    ; Read in raw power
     raw_power = h5d_read(raw_power_id)
-    
+
     ; Filter based on start and end date if requested
     if (keyword_set(start_dt) or keyword_set(end_dt)) then begin
       ; Convert timestamps to julian dates for comparison
-      data_yy = fix(strmid(timestamps,0,4))
-      data_mm = fix(strmid(timestamps,5,2))
-      data_dd = fix(strmid(timestamps,8,2))
-      data_hr = fix(strmid(timestamps,11,2))
-      data_mn = fix(strmid(timestamps,14,2))
-      data_sc = fix(strmid(timestamps,17,2))
+      data_yy = fix(strmid(timestamps, 0, 4))
+      data_mm = fix(strmid(timestamps, 5, 2))
+      data_dd = fix(strmid(timestamps, 8, 2))
+      data_hr = fix(strmid(timestamps, 11, 2))
+      data_mn = fix(strmid(timestamps, 14, 2))
+      data_sc = fix(strmid(timestamps, 17, 2))
       data_juldt = julday(data_mm, data_dd, data_yy, data_hr, data_mn, data_sc)
-      
+
       ; Obtain indices corresponding to desired time range
       if (keyword_set(start_dt) and keyword_set(end_dt)) then begin
         ; start and end time supplied
@@ -148,13 +142,12 @@ pro __ucrio_readfile_hsr, $
         print, '[ucrio_read] Error - range start_dt, end_dt does not correspond to any of the input files'
         continue
       endif
-      
+
       ; Cut down timestamp and data to requested range
       timestamps = timestamps[ts_idx]
-      raw_power = raw_power[ts_idx]
-      
+      raw_power = raw_power[ts_idx, *]
     endif
-    
+
     ; Reading in the file level metadata into a hash and then converting to IDL struct
     meta_group_id = h5g_open(file_id, 'metadata')
     file_meta_dataset_id = h5d_open(meta_group_id, 'file')
@@ -162,27 +155,31 @@ pro __ucrio_readfile_hsr, $
 
     ; Iterating through each attribute and adding to hash, then converting to struct
     file_metadata = hash()
-    for i = 0, (n_file_meta_attributes - 1) do begin
-      attribute_id = h5a_open_idx(file_meta_dataset_id, i)
-      attribute_name = h5a_get_name(attribute_id)
-      attribute = h5a_read(attribute_id)
-      file_metadata[attribute_name] = attribute
-    endfor
-    
+    if (~keyword_set(no_metadata)) then begin
+      for i = 0, (n_file_meta_attributes - 1) do begin
+        attribute_id = h5a_open_idx(file_meta_dataset_id, i)
+        attribute_name = h5a_get_name(attribute_id)
+        attribute = h5a_read(attribute_id)
+        file_metadata[attribute_name] = attribute
+      endfor
+    endif
+
+    ; Temporary until we have k2 HSR data
+    file_absorption = !values.f_nan
+
     ; Append all to lists
     master_timestamp.add, timestamps
     master_metadata.add, file_metadata
     if (strmatch(f_basename, '*k2*') eq 1) then begin
-      master_data.add, {raw_power:raw_power, absorption:file_absorption}
+      master_data.add, {raw_power: raw_power, absorption: file_absorption, band_central_frequency: band_central_freq, band_passband: band_passband}
     endif else if (strmatch(f_basename, '*k0*') eq 1) then begin
-      master_data.add, {raw_power:raw_power, absorption:!values.f_nan}
+      master_data.add, {raw_power: raw_power, absorption: !values.f_nan, band_central_frequency: band_central_freq, band_passband: band_passband}
     endif
     h5_close
   endforeach
-  
+
   ; Assign to global vars
   data = master_data
   metadata = master_metadata
   timestamp_list = master_timestamp
-  
 end
