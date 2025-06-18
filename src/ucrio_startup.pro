@@ -44,6 +44,11 @@ setenv, 'IGRF_COEFFS=' + !package_path + path_sep() + $
 .run ucrio_read
 .run ucrio_is_read_supported
 
+; tools
+.run ucrio_get_decomposed_color
+.run ucrio_plot
+.run ucrio_map_oplot
+
 ; check if there's a new version available
 print, '[idl-ucrio] Checking for new version ...'
 version_info = ucrio_check_version(/init_mode)
