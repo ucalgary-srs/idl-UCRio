@@ -32,6 +32,7 @@ setenv, 'IGRF_COEFFS=' + !package_path + path_sep() + $
 
 ; top level
 .run ucrio_version
+.run ucrio_proxy
 
 ; data
 .run ucrio_list_datasets
