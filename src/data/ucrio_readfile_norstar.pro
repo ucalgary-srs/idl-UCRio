@@ -177,7 +177,7 @@ pro __ucrio_readfile_norstar, $
 
         ; Some files have ** in timestamps, indicated incorrect print formatting
         ; in file creation. If this is the case, we skip reading the entire file
-        ; as is done in PyAuroraX
+        ; as is done in PyUCRio
         if strmatch(line_time, '*\**') then begin
           print, '[ucrio_read] Error: Could not process timestamps for file ' + f
           is_err = 1
