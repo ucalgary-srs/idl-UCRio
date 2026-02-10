@@ -62,7 +62,7 @@ pro ucrio_example_datasets_and_observatories
   ; about the sites where data was produced during the array operations. Each observatory object provides
   ; site code and full names, along with their geodetic latitude and longitude.
   ;
-  ; You can use the `aurorax_list_observatories()` function to retrieve observatory information. To determine
+  ; You can use the `ucrio_list_observatories()` function to retrieve observatory information. To determine
   ; the valid 'instrument_array' values, please refer to the IDL-UCRio API reference, or utilize the integrated
   ; docs for the functions.
 

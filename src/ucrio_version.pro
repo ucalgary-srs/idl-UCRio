@@ -16,7 +16,7 @@
 
 function __ucrio_version
   compile_opt hidden
-  return, '1.0.0'
+  return, '1.1.0'
 end
 
 ;+

@@ -32,7 +32,7 @@ pro ucrio_example_using_proxies
   ; The below examples assume that you are already connected to a proxy that can be interacted
   ; with by using a hostname of 'localhost' and port 9000. Adjust this example as needed.
 
-  ; Initialize the proxy connection details with IDL-AuroraX. This step must be performed
+  ; Initialize the proxy connection details with IDL-UCRio. This step must be performed
   ; each time IDL is started. It will set environment variables.
   ucrio_set_proxy, 'localhost', 9000
 

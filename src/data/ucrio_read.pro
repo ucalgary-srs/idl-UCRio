@@ -40,11 +40,11 @@
 ;       Struct
 ;
 ; :Examples:
-;       download_obj = aurorax_ucalgary_download('THEMIS_ASI_RAW', '2022-01-01T06:00:00', '2022-01-01T06:59:59', site_uid = 'gill')
-;       data = aurorax_ucalgary_read(download_obj.dataset, download_obj.filenames)
+;       download_obj = ucrio_download('NORSTAR_RIOMETER_K2_TXT', '2017-11-09T00:00:00', '2017-11-09T23:59:59', site_uid = 'pina')
+;       data = ucrio_ucalgary_read(download_obj.dataset, download_obj.filenames)
 ;       help,data
 ;
-;       data = aurorax_ucalgary_read(download_obj.dataset, download_obj.filenames, start_dt = '2022-01-01T06:13:00', end_dt = '2022-01-01T06:40:00')
+;       data = ucrio_ucalgary_read(download_obj.dataset, download_obj.filenames, start_dt = '2022-01-01T06:13:00', end_dt = '2022-01-01T06:40:00')
 ;       help, data
 ;+
 function ucrio_read, dataset, file_list, start_dt = start_dt, end_dt = end_dt, first_record = first_record, no_metadata = no_metadata, quiet = quiet

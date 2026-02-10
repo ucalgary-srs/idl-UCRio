@@ -54,7 +54,12 @@ function ucrio_list_datasets, name = name, level = level
   req.setProperty, headers = 'User-Agent: idl-ucrio/' + __ucrio_version()
 
   ; make request
-  output = req.get(/string_array)
+  r = __ucrio_perform_api_request('get', 'ucrio_list_datasets', req)
+  if (r.status_code ne 200) then return, !null
+  output = r.output
+
+  ; cleanup this request
+  obj_destroy, req
 
   ; serialize into struct
   status = json_parse(output, /tostruct)

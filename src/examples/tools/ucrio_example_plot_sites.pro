@@ -19,7 +19,7 @@ pro ucrio_example_plot_sites
   ; Plot Riometer Sites
   ; -------------------
   ;
-  ; By leveraging the API access functions available through IDL-AuroraX, it is
+  ; By leveraging the API access functions available through IDL-UCrio, it is
   ; straightforward to make maps of an instrument's location, at specific sites,
   ; or across all sites. Below are several examples of doing so.
   ;

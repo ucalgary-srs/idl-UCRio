@@ -35,7 +35,7 @@
 function ucrio_get_decomposed_color, rgb_triple
   dims = size(rgb_triple, /dimensions)
   if dims ne [3] and dims ne [1, 3] then begin
-    print, '[aurorax_get_decomposed_color] Error: enter color as a 3-element array, [R, G, B].'
+    print, '[ucrio_get_decomposed_color] Error: enter color as a 3-element array, [R, G, B].'
     return, !null
   endif
   return, rgb_triple[0] + (rgb_triple[1] * 2l ^ 8l) + (rgb_triple[2] * 2l ^ 16l)

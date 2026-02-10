@@ -1,6 +1,6 @@
 # IDL-UCRio
 
-![Stable version](https://img.shields.io/badge/Latest%20stable%20release-v1.0.0-orange)
+![Stable version](https://img.shields.io/badge/Latest%20stable%20release-v1.1.0-orange)
 ![IDL version required](https://img.shields.io/badge/IDL-8.8.3%2B-blue)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14239005.svg)](https://doi.org/10.5281/zenodo.14239005)
 
@@ -62,7 +62,8 @@ Alternatively, you can install the idl-ucrio library manually by downloading the
     @ucrio_startup
     ```
 
-4. [OPTIONAL] If you added the above line to your startup file, you must reset your IDL session. Do this by either clicking the Reset button in the IDL editor or by typing `.reset` into the IDL command prompt.
+4. Edit the ucrio_startup.pro file to adjust the paths to the AACGM files. See lines 25-28.
+5. [OPTIONAL] If you added the above line to your startup file, you must reset your IDL session. Do this by either clicking the Reset button in the IDL editor or by typing `.reset` into the IDL command prompt.
 
 ## Updating
 

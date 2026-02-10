@@ -140,6 +140,21 @@ function ucrio_download, $
       req.setProperty, url_path = url.replace('https://data.phys.ucalgary.ca/', '')
       req.setProperty, headers = 'User-Agent: idl-ucrio/' + __ucrio_version()
 
+      ; set proxy
+      proxy_hostname = getenv('UCRIO_PROXY_HOSTNAME')
+      proxy_port = getenv('UCRIO_PROXY_PORT')
+      if (proxy_hostname ne '' and proxy_port ne '') then begin
+        ; proxy hostname and port are configured, set them in the request object
+        req.setProperty, proxy_host = proxy_hostname
+        req.setProperty, proxy_port = fix(proxy_port)
+
+        ; set username and password
+        proxy_username = getenv('UCRIO_PROXY_USERNAME')
+        proxy_password = getenv('UCRIO_PROXY_PASSWORD')
+        if (proxy_username ne '') then req.setProperty, proxy_username = proxy_username
+        if (proxy_password ne '') then req.setProperty, proxy_password = proxy_password
+      endif
+
       ; if the url object throws an error it will be caught here
       catch, error_status
       if (error_status ne 0) then begin

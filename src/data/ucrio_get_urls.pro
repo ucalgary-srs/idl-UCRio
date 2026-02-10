@@ -65,7 +65,12 @@ function ucrio_get_urls, dataset_name, start_ts, end_ts, site_uid = site_uid, de
   req.setProperty, headers = 'User-Agent: idl-ucrio/' + __ucrio_version()
 
   ; make request
-  output = req.get(/string_array)
+  r = __ucrio_perform_api_request('get', 'urio_get_urls', req)
+  if (r.status_code ne 200) then return, !null
+  output = r.output
+
+  ; cleanup this request
+  obj_destroy, req
 
   ; serialize into struct
   status = json_parse(output, /tostruct)
