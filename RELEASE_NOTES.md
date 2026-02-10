@@ -1,4 +1,4 @@
-Version 1.1.0 (2026-01-31)
+Version 1.1.0 (2026-02-10)
 -------------------------
 - improvements to AACGM initialization (primarily for installations not using ipm)
 - added support for using with a proxy connection
